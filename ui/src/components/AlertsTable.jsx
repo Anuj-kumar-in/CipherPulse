@@ -14,7 +14,7 @@ const AlertsTable = ({ alerts, onReview }) => {
       <div style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
           <thead>
-            <tr style={{ backgroundColor: '#1e293b', borderBottom: '1px solid var(--border)' }}>
+            <tr style={{ backgroundColor: '#f9fafb', borderBottom: '1px solid var(--border)' }}>
               <th style={{ padding: '16px', fontSize: '13px', color: 'var(--text-secondary)' }}>Risk Score</th>
               <th style={{ padding: '16px', fontSize: '13px', color: 'var(--text-secondary)' }}>Message</th>
               <th style={{ padding: '16px', fontSize: '13px', color: 'var(--text-secondary)' }}>Sender</th>
@@ -57,7 +57,7 @@ const AlertsTable = ({ alerts, onReview }) => {
                     </div>
                   </td>
                   <td style={{ padding: '16px' }}>
-                    <div style={{ fontSize: '14px', fontWeight: '600' }}>{alert.sender_id}</div>
+                    <div style={{ fontSize: '14px', fontWeight: '600', color: 'var(--text-primary)' }}>{alert.sender_id}</div>
                     <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>{alert.team}</div>
                   </td>
                   <td style={{ padding: '16px' }}>
@@ -67,9 +67,9 @@ const AlertsTable = ({ alerts, onReview }) => {
                           fontSize: '10px', 
                           padding: '2px 6px', 
                           borderRadius: '4px', 
-                          backgroundColor: 'rgba(139, 92, 246, 0.2)', 
-                          color: 'var(--accent-purple)',
-                          border: '1px solid rgba(139, 92, 246, 0.3)'
+                          backgroundColor: '#f3f4f6', 
+                          color: 'var(--text-primary)',
+                          border: '1px solid var(--border)'
                         }}>
                           {l}
                         </span>
