@@ -85,7 +85,7 @@ const ReviewModal = ({ alert, onClose, onUpdate }) => {
             <div>
               <h4 style={{ margin: '0 0 12px 0', fontSize: '14px', color: 'var(--text-secondary)' }}>MESSAGE CONTENT</h4>
               <div style={{ 
-                padding: '16px', background: '#0f172a', borderRadius: '12px', border: '1px solid var(--border)',
+                padding: '16px', background: '#ffffff', borderRadius: '4px', border: '1px solid var(--border)',
                 lineHeight: '1.6', fontSize: '16px'
               }}>
                 {renderHighlightedText()}
@@ -98,28 +98,28 @@ const ReviewModal = ({ alert, onClose, onUpdate }) => {
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                 {(explanation.top_tokens || []).map((t, i) => (
                   <div key={i} style={{ 
-                    fontSize: '12px', padding: '4px 10px', borderRadius: '20px', 
-                    background: 'rgba(6, 182, 212, 0.1)', border: '1px solid var(--accent-cyan)',
+                    fontSize: '12px', padding: '4px 10px', borderRadius: '4px', 
+                    background: '#f3f4f6', border: '1px solid var(--border)',
                     display: 'flex', gap: '8px'
                   }}>
-                    <span>{t.token}</span>
-                    <span style={{ fontWeight: 'bold', color: 'var(--accent-cyan)' }}>{t.score.toFixed(2)}</span>
+                    <span style={{ color: 'var(--text-primary)' }}>{t.token}</span>
+                    <span style={{ fontWeight: 'bold', color: 'var(--text-primary)' }}>{t.score.toFixed(2)}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             <div>
-              <div style={{ padding: '20px', background: 'rgba(255,255,255,0.03)', borderRadius: '12px', marginBottom: '24px' }}>
+              <div style={{ padding: '20px', background: '#f9fafb', border: '1px solid var(--border)', borderRadius: '4px', marginBottom: '24px' }}>
                 <h4 style={{ margin: '0 0 16px 0', fontSize: '14px', color: 'var(--text-secondary)' }}>METADATA</h4>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                   <div>
                     <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block' }}>SENDER</span>
-                    <span style={{ fontSize: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}><User size={14}/> {alert.sender_id}</span>
+                    <span style={{ fontSize: '14px', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}><User size={14}/> {alert.sender_id}</span>
                   </div>
                   <div>
                     <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block' }}>TEAM</span>
-                    <span style={{ fontSize: '14px' }}>{alert.team}</span>
+                    <span style={{ fontSize: '14px', color: 'var(--text-primary)' }}>{alert.team}</span>
                   </div>
                   <div>
                     <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block' }}>RISK SCORE</span>
@@ -127,7 +127,7 @@ const ReviewModal = ({ alert, onClose, onUpdate }) => {
                   </div>
                   <div>
                     <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block' }}>SOURCE</span>
-                    <span style={{ fontSize: '14px' }}>{alert.source}</span>
+                    <span style={{ fontSize: '14px', color: 'var(--text-primary)' }}>{alert.source}</span>
                   </div>
                 </div>
               </div>
@@ -137,17 +137,17 @@ const ReviewModal = ({ alert, onClose, onUpdate }) => {
                 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' }}>
                   <label style={{ 
-                    cursor: 'pointer', padding: '12px', borderRadius: '8px', border: `1px solid ${feedback === 'true_positive' ? 'var(--accent-red)' : 'var(--border)'}`,
-                    backgroundColor: feedback === 'true_positive' ? 'rgba(239, 68, 68, 0.1)' : 'transparent',
-                    display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px'
+                    cursor: 'pointer', padding: '12px', borderRadius: '4px', border: `1px solid ${feedback === 'true_positive' ? 'var(--accent-red)' : 'var(--border)'}`,
+                    backgroundColor: feedback === 'true_positive' ? '#fef2f2' : '#ffffff',
+                    display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', color: 'var(--text-primary)'
                   }}>
                     <input type="radio" name="feedback" value="true_positive" checked={feedback === 'true_positive'} onChange={e => {setFeedback(e.target.value); setStatus('confirmed');}} style={{ display: 'none' }} />
                     <CheckCircle size={16} color={feedback === 'true_positive' ? 'var(--accent-red)' : 'var(--text-secondary)'} /> True Positive
                   </label>
                   <label style={{ 
-                    cursor: 'pointer', padding: '12px', borderRadius: '8px', border: `1px solid ${feedback === 'false_positive' ? 'var(--accent-green)' : 'var(--border)'}`,
-                    backgroundColor: feedback === 'false_positive' ? 'rgba(16, 185, 129, 0.1)' : 'transparent',
-                    display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px'
+                    cursor: 'pointer', padding: '12px', borderRadius: '4px', border: `1px solid ${feedback === 'false_positive' ? 'var(--accent-green)' : 'var(--border)'}`,
+                    backgroundColor: feedback === 'false_positive' ? '#f0fdf4' : '#ffffff',
+                    display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', color: 'var(--text-primary)'
                   }}>
                     <input type="radio" name="feedback" value="false_positive" checked={feedback === 'false_positive'} onChange={e => {setFeedback(e.target.value); setStatus('dismissed');}} style={{ display: 'none' }} />
                     <XCircle size={16} color={feedback === 'false_positive' ? 'var(--accent-green)' : 'var(--text-secondary)'} /> False Positive
@@ -162,7 +162,7 @@ const ReviewModal = ({ alert, onClose, onUpdate }) => {
                     onChange={e => setNotes(e.target.value)}
                     placeholder="Enter review notes here..."
                     style={{ 
-                      width: '100%', padding: '12px', background: '#0f172a', border: '1px solid var(--border)', borderRadius: '8px', color: 'white',
+                      width: '100%', padding: '12px', background: '#ffffff', border: '1px solid var(--border)', borderRadius: '4px', color: 'var(--text-primary)',
                       fontSize: '14px', resize: 'none'
                     }}
                   />

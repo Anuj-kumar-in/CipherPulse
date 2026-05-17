@@ -47,7 +47,7 @@ const MessageComposer = ({ onMessageSent }) => {
               type="text" 
               value={sender} 
               onChange={(e) => setSender(e.target.value)}
-              style={{ width: '100%', padding: '10px', background: '#0f172a', border: '1px solid var(--border)', borderRadius: '8px', color: 'white' }}
+              style={{ width: '100%', padding: '10px', background: '#ffffff', border: '1px solid var(--border)', borderRadius: '4px', color: 'var(--text-primary)' }}
             />
           </div>
           <div>
@@ -58,7 +58,7 @@ const MessageComposer = ({ onMessageSent }) => {
               type="text" 
               value={role} 
               onChange={(e) => setRole(e.target.value)}
-              style={{ width: '100%', padding: '10px', background: '#0f172a', border: '1px solid var(--border)', borderRadius: '8px', color: 'white' }}
+              style={{ width: '100%', padding: '10px', background: '#ffffff', border: '1px solid var(--border)', borderRadius: '4px', color: 'var(--text-primary)' }}
             />
           </div>
           <div>
@@ -69,7 +69,7 @@ const MessageComposer = ({ onMessageSent }) => {
               type="text" 
               value={team} 
               onChange={(e) => setTeam(e.target.value)}
-              style={{ width: '100%', padding: '10px', background: '#0f172a', border: '1px solid var(--border)', borderRadius: '8px', color: 'white' }}
+              style={{ width: '100%', padding: '10px', background: '#ffffff', border: '1px solid var(--border)', borderRadius: '4px', color: 'var(--text-primary)' }}
             />
           </div>
         </div>
@@ -84,10 +84,10 @@ const MessageComposer = ({ onMessageSent }) => {
             style={{ 
               width: '100%', 
               padding: '12px', 
-              background: '#0f172a', 
+              background: '#ffffff', 
               border: '1px solid var(--border)', 
-              borderRadius: '8px', 
-              color: 'white',
+              borderRadius: '4px', 
+              color: 'var(--text-primary)',
               resize: 'vertical',
               fontSize: '14px'
             }}
