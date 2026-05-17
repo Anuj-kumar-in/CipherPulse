@@ -19,7 +19,6 @@ def create_model() -> LogisticRegression:
     return LogisticRegression(
         max_iter=1000,
         class_weight="balanced",
-        multi_class="multinomial",
         solver="lbfgs",
         C=1.0,
     )

@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str = "postgresql://cipherpulse:cipherpulse_secret@localhost:5432/cipherpulse"
     MODEL_VERSION: str = "v1-tfidf-lr"
     RISK_THRESHOLD: int = 60
+    USE_TEE: bool = False  # Enable to route inference through AWS Nitro Enclave
     CORS_ORIGINS: list[str] = ["http://localhost:5173", "http://localhost:3000", "http://localhost:8050"]
 
     class Config:

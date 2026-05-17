@@ -24,30 +24,46 @@ DATA_FILE_ALT = os.path.join(os.path.dirname(__file__), "..", "data", "generated
 
 
 def load_training_data(filepath: str) -> tuple[list[str], list[str]]:
-    """Load texts and labels from CSV."""
+    """Load texts and labels from CSV or JSONL."""
     texts = []
     labels = []
-    with open(filepath, "r", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            texts.append(row["message_text"])
-            if row["is_flagged"].strip().lower() in ("true", "1", "yes"):
-                labels.append(row.get("flag_reason", "UNKNOWN") or "UNKNOWN")
-            else:
-                labels.append("BENIGN")
+    
+    if filepath.endswith('.jsonl'):
+        import json
+        with open(filepath, "r", encoding="utf-8") as f:
+            for line in f:
+                if not line.strip(): continue
+                row = json.loads(line)
+                texts.append(row["message_text"])
+                if int(row.get("label", 0)) == 1:
+                    labels.append(row.get("label_type", "UNKNOWN"))
+                else:
+                    labels.append("BENIGN")
+    else:
+        with open(filepath, "r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                texts.append(row["message_text"])
+                if row["is_flagged"].strip().lower() in ("true", "1", "yes"):
+                    labels.append(row.get("flag_reason", "UNKNOWN") or "UNKNOWN")
+                else:
+                    labels.append("BENIGN")
     return texts, labels
 
 
 def train():
     # Find data file
-    data_path = None
-    for p in [DATA_FILE, DATA_FILE_ALT]:
-        if os.path.exists(p):
-            data_path = p
-            break
+    if len(sys.argv) > 1:
+        data_path = sys.argv[1]
+    else:
+        data_path = None
+        for p in [DATA_FILE, DATA_FILE_ALT]:
+            if os.path.exists(p):
+                data_path = p
+                break
 
-    if data_path is None:
-        print("❌ Data file not found. Run generate_data.py first.")
+    if data_path is None or not os.path.exists(data_path):
+        print(f"❌ Data file not found at {data_path}.")
         sys.exit(1)
 
     print(f"📂 Loading data from {data_path}")

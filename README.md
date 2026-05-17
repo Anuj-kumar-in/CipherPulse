@@ -63,6 +63,27 @@ python etl/train_model.py
 python etl/score_batch.py
 ```
 
+#### ML Model Operations (Training & Testing)
+We have optimized scripts to train and evaluate the machine learning model.
+
+* **Train the Model:**
+  To train the classifier on a JSONL dataset (e.g., the 1-million messages dataset):
+  ```powershell
+  $env:PYTHONIOENCODING="utf-8"; python3.11 etl/train_model.py data/training_messages_1M.jsonl
+  ```
+
+* **Test Model on custom message (Single Inference):**
+  To quickly test the model predictions on custom text:
+  ```powershell
+  python3.11 Scripts/test_model.py "I guarantee this investment will double your money by next week!"
+  ```
+
+* **Evaluate Model on a Dataset (.jsonl):**
+  To run a full evaluation with precision, recall, and f1-score on a validation dataset like `data/1.jsonl`:
+  ```powershell
+  $env:PYTHONIOENCODING="utf-8"; python3.11 Scripts/test_model.py data/1.jsonl
+  ```
+
 ### 4. Running the Services
 Start all three components (ideally in separate terminals):
 
