@@ -64,3 +64,6 @@ Thumbs.db
 # Logs
 logs/
 *.log
+
+# Local Telemetry Docs
+Docs/user.md
