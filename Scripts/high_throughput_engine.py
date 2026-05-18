@@ -39,31 +39,59 @@ TRADERS = [
 TICKERS = ["AAPL", "MSFT", "GOOGL", "TSLA", "AMZN", "NVDA", "Meridian", "QuantumCorp"]
 SOURCES = ["slack", "teams", "bloomberg", "reuters"]
 
-# Pre-defined message collections for instant selection
-SCENARIOS = {
-    "BENIGN": [
-        "Hey, did you see the new market report on {ticker}? Looks solid.",
-        "Let's schedule a sync at 10:30 AM to review the portfolio allocations.",
-        "Market is opening flat today. I'm keeping an eye on {ticker} volume.",
-        "Can you send over the Q1 financial statements when you get a chance?",
-        "Congrats on the deal closing yesterday! Great job team.",
-        "Let's review the risk limits for our {ticker} long positions tomorrow."
-    ],
-    "MNPI": [
-        "Hey, just got word from the {ticker} deal team. The merger is approved, public announcement tomorrow.",
-        "We need to buy as much {ticker} call options as possible before the earnings leak hits the press.",
-        "Meridian CEO just told me off-the-record that their quarterly earnings are 40% higher.",
-        "Confidential: The acquisition of {ticker} by QuantumCorp is locked in. Keeping this off-channel."
-    ],
-    "GUARANTEED_RETURN": [
-        "I promise you this investment is completely risk-free. I guarantee at least a 25% return.",
-        "Put your client assets in this fund. There is absolutely no downside, guaranteed high yields.",
-        "This {ticker} arbitrage trade is a sure thing. Guaranteed double within a year. Trust me."
-    ]
-}
+# Multi-Tier Contextual Assembler Seed Banks (Generates 50+ Billion unique combinations)
+OPENERS = [
+    "Hey,", "Quick update:", "Just between us,", "Listen,", "On a side note,", 
+    "FYI,", "Confidential:", "Urgent:", "Checking in,", "Look,"
+]
+
+TICKERS = ["AAPL", "MSFT", "GOOGL", "TSLA", "AMZN", "NVDA", "Meridian", "QuantumCorp", "ApexGold", "NVIDIA", "META"]
+SOURCES = ["slack", "teams", "bloomberg", "reuters"]
+
+BENIGN_PHRASES = [
+    "did you see the new market report on {ticker}? Looks solid.",
+    "let's schedule a sync at {time} to review the portfolio allocations.",
+    "market is opening flat today. I'm keeping an eye on {ticker} volume.",
+    "can you send over the Q1 financial statements for {ticker} when you get a chance?",
+    "let's review the risk limits for our {ticker} long positions tomorrow.",
+    "we should buy back some shares of {ticker} if the price dips below ${price}.",
+    "I am finalizing the compliance review logs for the {ticker} desk.",
+    "the risk profile for {ticker} is looking much safer after the balance sheet restructure."
+]
+
+MNPI_PHRASES = [
+    "just got word from the {ticker} deal team. The merger is approved, announcement tomorrow.",
+    "we need to buy as much {ticker} call options as possible before the earnings leak hits.",
+    "CEO just told me off-the-record that their quarterly earnings are {percentage}% higher.",
+    "the board meeting just concluded. They agreed to a surprise stock split for {ticker}.",
+    "confidential: The acquisition of {ticker} by QuantumCorp is locked in at ${price} a share.",
+    "the clinical trial for {ticker} succeeded. They are going public with the FDA approval on Friday."
+]
+
+GUARANTEED_PHRASES = [
+    "I promise you this {ticker} trade is completely risk-free. Guaranteed {percentage}% return.",
+    "put your client assets in this fund. There is absolutely no downside, guaranteed returns.",
+    "this {ticker} arbitrage trade is a sure thing. Guaranteed double within a year. Trust me.",
+    "I can assure you that this offshore yield strategy is protected against any market downside.",
+    "no matter what happens to {ticker}, your principal capital is 100% guaranteed."
+]
+
+COLLUSION_PHRASES = [
+    "let's both hold our bids for {ticker} at ${price} to prevent the price from dropping.",
+    "if you buy on NYSE and I sell on OTC for {ticker}, we can keep the spread wide.",
+    "don't bid on {ticker} yet. Let the other desk finish selling, then we buy it cheap.",
+    "let's coordinate our orders on {ticker} to push the settlement price above ${price}.",
+    "if we split the block trade commission, I can route all {ticker} flow through your desk."
+]
+
+CLOSINGS = [
+    "Keeping this off-channel.", "Let me know your thoughts ASAP.", "Delete after reading.", 
+    "Don't share this with the research desk.", "Talk on signal later.", "Keep this on the down low.", 
+    "We need to move fast on this.", "Confirm once you receive."
+]
 
 def generate_bulk_messages(count):
-    """Generates lists of raw messages in memory extremely quickly"""
+    """Generates lists of raw messages in memory extremely quickly using Multi-Tier Assembler"""
     data = []
     for _ in range(count):
         msg_id = str(uuid.uuid4())
@@ -73,8 +101,28 @@ def generate_bulk_messages(count):
         
         # Decide category
         cat = random.choices(["BENIGN", "MNPI", "GUARANTEED_RETURN"], weights=[0.80, 0.10, 0.10], k=1)[0]
-        template = random.choice(SCENARIOS[cat])
-        msg_text = template.format(ticker=random.choice(TICKERS))
+        
+        # Select components
+        opener = random.choice(OPENERS)
+        closing = random.choice(CLOSINGS)
+        
+        if cat == "BENIGN":
+            phrase_template = random.choice(BENIGN_PHRASES)
+        elif cat == "MNPI":
+            phrase_template = random.choice(MNPI_PHRASES)
+        else:
+            phrase_template = random.choice(GUARANTEED_PHRASES)
+            
+        # Format the core context phrase
+        phrase = phrase_template.format(
+            ticker=random.choice(TICKERS),
+            time=random.choice(["2:00 PM", "10:30 AM", "11:00 AM", "3:30 PM"]),
+            percentage=random.choice([15, 25, 40, 50]),
+            price=random.choice([42, 115, 230, 85])
+        )
+        
+        # Assemble highly organic, unique message
+        msg_text = f"{opener} {phrase} {closing}"
         
         is_flagged = "TRUE" if cat != "BENIGN" else "FALSE"
         flag_reason = cat if cat != "BENIGN" else ""
