@@ -9,6 +9,7 @@ import SystemMetrics from './pages/SystemMetrics'
 import Settings from './pages/Settings'
 import SqlAnalyzer from './pages/SqlAnalyzer'
 import BlueprintExplorer from './pages/BlueprintExplorer'
+import SignupWizard from './pages/SignupWizard'
 
 // Protected Route Component to restrict access to authenticated compliance officers
 const ProtectedRoute = ({ children }) => {
@@ -26,6 +27,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignupWizard />} />
           
           {/* Protected Dashboard Routes */}
           <Route path="/inbox" element={

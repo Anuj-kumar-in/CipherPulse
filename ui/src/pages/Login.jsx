@@ -183,6 +183,16 @@ const Login = () => {
           </button>
         </form>
 
+        <div style={{ textAlign: 'center', marginTop: '16px' }}>
+          <span style={{ fontSize: '13.5px', color: '#64748b' }}>Need to scale or deploy a new node? </span>
+          <span 
+            onClick={() => navigate('/signup')} 
+            style={{ fontSize: '13.5px', color: '#00A3E0', fontWeight: '700', cursor: 'pointer', textDecoration: 'underline' }}
+          >
+            Provision Enclave
+          </span>
+        </div>
+
         {/* Credentials hints for demo ease */}
         <div style={{ 
           marginTop: '32px', 
