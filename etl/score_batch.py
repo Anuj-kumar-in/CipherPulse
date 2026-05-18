@@ -28,9 +28,17 @@ BATCH_SIZE = 100
 
 
 def score_batch():
-    print("🔄 Loading ML artifacts...")
-    vectorizer = load_vectorizer()
-    model = load_model()
+    from backend.app.core.config import settings
+    import socket
+
+    print(f"🔒 TEE Integration Mode: {'ENABLED' if settings.USE_TEE else 'DISABLED'}")
+    
+    vectorizer = None
+    model = None
+    if not settings.USE_TEE:
+        print("🔄 Loading ML artifacts locally...")
+        vectorizer = load_vectorizer()
+        model = load_model()
 
     conn = psycopg2.connect(DATABASE_URL)
     read_cur = conn.cursor()
@@ -61,34 +69,53 @@ def score_batch():
 
     scored_count = 0
     for raw_id, message_text in rows:
-        # Vectorize
-        features = vectorizer.transform([message_text])
-
-        # Predict
-        result = predict_risk(model, features)
-
-        # Explain
-        explanation = explain_prediction(
-            message_text, vectorizer, model,
-            result["predicted_label"]
-        )
-
-        # Build labels array
-        labels = []
-        if result["predicted_label"] != "BENIGN":
-            labels.append(result["predicted_label"])
-            # Add secondary labels with significant probability
-            for lbl, prob in result["probabilities"].items():
-                if lbl != "BENIGN" and lbl != result["predicted_label"] and prob > 0.15:
-                    labels.append(lbl)
+        if settings.USE_TEE:
+            # Score via TEE Enclave
+            try:
+                try:
+                    client = socket.socket(socket.AF_VSOCK, socket.SOCK_STREAM)
+                    client.connect((16, 5000))
+                except AttributeError:
+                    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    client.connect(("127.0.0.1", 5000))
+                
+                client.sendall(json.dumps({"text": message_text}).encode('utf-8'))
+                response_data = client.recv(1024 * 1024)
+                tee_result = json.loads(response_data.decode('utf-8'))
+                
+                if "error" in tee_result:
+                    raise Exception(tee_result["error"])
+                
+                risk_score = float(tee_result["risk_score"])
+                labels = tee_result["labels"]
+                explanation = tee_result["explanation"]
+            except Exception as e:
+                print(f"❌ TEE batch connection failed: {e}")
+                conn.close()
+                sys.exit(1)
+        else:
+            # Score locally
+            features = vectorizer.transform([message_text])
+            result = predict_risk(model, features)
+            explanation = explain_prediction(
+                message_text, vectorizer, model,
+                result["predicted_label"]
+            )
+            labels = []
+            if result["predicted_label"] != "BENIGN":
+                labels.append(result["predicted_label"])
+                for lbl, prob in result["probabilities"].items():
+                    if lbl != "BENIGN" and lbl != result["predicted_label"] and prob > 0.15:
+                        labels.append(lbl)
+            risk_score = float(result["risk_score"])
 
         write_cur.execute(insert_sql, (
             str(uuid.uuid4()),
             str(raw_id),
-            result["risk_score"],
+            risk_score,
             json.dumps(labels),
             json.dumps(explanation),
-            MODEL_VERSION,
+            MODEL_VERSION + ("-TEE" if settings.USE_TEE else ""),
             datetime.utcnow(),
         ))
         scored_count += 1

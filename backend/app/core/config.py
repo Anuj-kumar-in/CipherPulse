@@ -16,8 +16,10 @@ class Settings(BaseSettings):
     USE_TEE: bool = False  # Enable to route inference through AWS Nitro Enclave
     CORS_ORIGINS: list[str] = ["http://localhost:5173", "http://localhost:3000", "http://localhost:8050"]
 
-    class Config:
-        env_file = ".env"
+    model_config = {
+        "extra": "ignore",
+        "env_file": ".env"
+    }
 
 
 settings = Settings()

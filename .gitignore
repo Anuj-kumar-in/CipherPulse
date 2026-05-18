@@ -36,7 +36,7 @@ env/
 ENV/
 env.bak/
 venv.bak/
-
+data
 # Node.js / React UI
 ui/node_modules/
 ui/dist/

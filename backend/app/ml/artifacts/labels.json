@@ -1,7 +1,8 @@
 [
+  "AML_SUSPICIOUS",
   "BENIGN",
   "COLLUSION",
-  "GUARANTEE",
+  "GUARANTEED_RETURN",
   "MNPI",
-  "PII"
+  "PII_LEAKAGE"
 ]
