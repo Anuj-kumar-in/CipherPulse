@@ -15,6 +15,7 @@ export const api = {
   getAlerts: (params) => client.get('/alerts', { params }),
   submitFeedback: (data) => client.post('/feedback', data),
   getStats: () => client.get('/stats'),
+  executeSql: (query) => client.post('/sql/analyze', { query }),
 };
 
 export default client;

@@ -135,3 +135,84 @@ def alert_count(
     db: Session = Depends(get_db),
 ):
     return {"count": crud.count_alerts(db, min_score=min_score)}
+
+
+# ─── Secure SQL Query Analyzer ───────────────────────────────────────────────────
+
+import time
+from fastapi import HTTPException
+
+class SQLQueryRequest(BaseModel):
+    query: str
+
+@router.post("/sql/analyze")
+def sql_analyze(req: SQLQueryRequest, db: Session = Depends(get_db)):
+    """
+    Execute read-only SELECT queries securely.
+    Ensures remote compliance users can query data without pulling it locally.
+    """
+    cleaned_query = req.query.strip()
+    query_upper = cleaned_query.upper()
+    
+    # 1. Enforce strict read-only SELECT check
+    if not query_upper.startswith("SELECT"):
+        raise HTTPException(
+            status_code=400,
+            detail="Security Violation: Only SELECT queries are permitted on this analyzer portal."
+        )
+        
+    # 2. Block potential multi-statement injections or dangerous DML keywords
+    forbidden_keywords = [
+        ";", "INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "CREATE", 
+        "TRUNCATE", "REPLACE", "GRANT", "REVOKE", "PG_SLEEP", "COPY"
+    ]
+    for keyword in forbidden_keywords:
+        if keyword in query_upper:
+            # Allow semicolon only if it's the very last character
+            if keyword == ";" and cleaned_query.endswith(";"):
+                # Check if there are other semicolons causing multi-statements
+                if cleaned_query.count(";") == 1:
+                    continue
+            raise HTTPException(
+                status_code=400,
+                detail=f"Security Violation: Query contains unauthorized keyword or token: '{keyword}'."
+            )
+            
+    # 3. Execute the SELECT statement on PostgreSQL
+    try:
+        from sqlalchemy import text
+        start_time = time.time()
+        result = db.execute(text(req.query))
+        
+        # Check if the result has rows (some commands don't)
+        if result.returns_rows:
+            cols = list(result.keys())
+            rows = []
+            for row in result.fetchall():
+                # Convert row values to string/JSON-safe values
+                row_dict = {}
+                for idx, col in enumerate(cols):
+                    val = row[idx]
+                    if val is not None and not isinstance(val, (int, float, str, bool)):
+                        val = str(val)
+                    row_dict[col] = val
+                rows.append(row_dict)
+        else:
+            cols = []
+            rows = []
+            
+        execution_time = time.time() - start_time
+        
+        return {
+            "status": "success",
+            "columns": cols,
+            "rows": rows,
+            "count": len(rows),
+            "execution_time_seconds": round(execution_time, 4)
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Database Query Error: {str(e)}"
+        )
+
