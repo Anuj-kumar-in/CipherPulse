@@ -61,12 +61,7 @@ jobs:
 
     - name: Run Orchestrated Compliance Data Pipeline
       env:
-        # Pass DB connection parameters to pipeline env
-        DB_HOST: localhost
-        DB_PORT: 5432
-        DB_NAME: cipherpulse
-        DB_USER: postgres
-        DB_PASSWORD: postgres
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/cipherpulse
         USE_TEE: 'false' # Local simulation for CI
       run: |
         python etl/run_pipeline.py --min-accuracy 0.90
