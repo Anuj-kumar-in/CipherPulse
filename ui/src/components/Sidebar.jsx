@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { 
-  Briefcase, 
   Folder, 
   BarChart2, 
   Sliders, 
@@ -11,23 +10,35 @@ import {
   ShieldCheck, 
   Cpu,
   Database,
-  Network
+  Network,
+  Bell,
+  Lock,
+  Layers,
+  Settings,
+  DatabaseZap,
+  Zap,
+  Shield
 } from 'lucide-react';
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [user, setUser] = useState({ name: 'Compliance Officer', id: '0x9212A' });
+  const [user, setUser] = useState({ name: 'ANUJ KUMAR', id: '0x9212A', role: 'CHIEF COMPLIANCE OFFICER' });
   const [isTeeActive, setIsTeeActive] = useState(false);
 
   useEffect(() => {
     // Retrieve mock session user info
     const cpUser = localStorage.getItem('cp_user');
     if (cpUser) {
-      setUser(JSON.parse(cpUser));
+      const parsedUser = JSON.parse(cpUser);
+      setUser({
+        name: parsedUser.name === 'Compliance Officer' ? 'ANUJ KUMAR' : parsedUser.name.toUpperCase(),
+        id: parsedUser.id || '0x9212A',
+        role: parsedUser.role === 'Surveillance Lead' ? 'CHIEF COMPLIANCE OFFICER' : parsedUser.role.toUpperCase()
+      });
     }
     
-    // Check if TEE is enabled in localStorage or environment state
+    // Check if TEE is enabled in localStorage
     const useTee = localStorage.getItem('settings_use_tee');
     setIsTeeActive(useTee === 'true');
   }, [location.pathname]);
@@ -39,79 +50,78 @@ const Sidebar = () => {
   };
 
   const navItems = [
-    { name: 'Review Inbox', path: '/inbox', icon: <Folder size={18} /> },
-    { name: 'Scored Results', path: '/analysis', icon: <FileText size={18} /> },
-    { name: 'Compliance Analytics', path: '/analytics', icon: <BarChart2 size={18} /> },
-    { name: 'Blueprint Explorer', path: '/blueprint', icon: <Network size={18} /> },
-    { name: 'SQL Analyzer', path: '/sql-analyzer', icon: <Database size={18} /> },
-    { name: 'System Metrics', path: '/metrics', icon: <Activity size={18} /> },
-    { name: 'Model Settings', path: '/settings', icon: <Sliders size={18} /> },
+    { name: 'Review Inbox', path: '/inbox', icon: <Folder size={16} /> },
+    { name: 'Scored Results', path: '/analysis', icon: <FileText size={16} /> },
+    { name: 'Compliance Analytics', path: '/analytics', icon: <BarChart2 size={16} /> },
+    { name: 'Blueprint Explorer', path: '/blueprint', icon: <Network size={16} /> },
+    { name: 'SQL Analyzer', path: '/sql-analyzer', icon: <Database size={16} /> },
+    { name: 'System Metrics', path: '/metrics', icon: <Activity size={16} /> },
+    { name: 'Model Settings', path: '/settings', icon: <Sliders size={16} /> },
   ];
 
   return (
     <div style={{
       width: '260px',
-      backgroundColor: '#ffffff',
-      borderRight: '1px solid #e2e8f0',
+      backgroundColor: '#0c1a2e',
+      borderRight: '1px solid #1e293b',
+      color: '#94a3b8',
       display: 'flex',
       flexDirection: 'column',
       height: '100vh',
       position: 'sticky',
       top: 0,
-      fontFamily: "'Inter', sans-serif",
-      color: '#334155',
+      fontFamily: '"Inter", sans-serif',
       flexShrink: 0
     }}>
       {/* Brand Header */}
-      <div style={{ 
-        height: '64px', 
-        padding: '0 24px', 
-        display: 'flex', 
-        alignItems: 'center', 
-        gap: '12px',
-        borderBottom: '1px solid #e2e8f0'
+      <div style={{
+        padding: '24px 20px',
+        borderBottom: '1px solid #1e293b',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px',
+        height: '80px'
       }}>
-        <div style={{ 
-          width: '30px', 
-          height: '30px', 
-          borderRadius: '6px', 
-          background: 'linear-gradient(135deg, #1d4ed8, #0ea5e9)',
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center'
+        <div style={{
+          width: '32px', height: '32px', borderRadius: '50%',
+          background: 'linear-gradient(135deg, #29B6F6 0%, #00A3E0 100%)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          boxShadow: '0 4px 10px rgba(41, 182, 246, 0.3)'
         }}>
-          <Briefcase size={16} color="#ffffff" />
+          <ShieldCheck size={18} color="#ffffff" strokeWidth={2.5} />
         </div>
-        <span style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px' }}>CipherPulse</span>
+        <span style={{ color: '#ffffff', fontWeight: '800', fontSize: '20px', letterSpacing: '-0.5px' }}>
+          cipher<span style={{ color: '#29B6F6', fontWeight: '400' }}>pulse</span>
+        </span>
       </div>
 
-      {/* TEE Secure Status Indicator */}
-      <div style={{ padding: '16px 24px 8px 24px' }}>
+      {/* TEE Secure Status Indicator Badge */}
+      <div style={{ padding: '16px 20px 8px 20px' }}>
         <div style={{
-          padding: '10px 14px',
+          padding: '12px 14px',
           borderRadius: '8px',
-          backgroundColor: isTeeActive ? 'rgba(16, 185, 129, 0.06)' : 'rgba(245, 158, 11, 0.06)',
-          border: isTeeActive ? '1px solid rgba(16, 185, 129, 0.15)' : '1px solid rgba(245, 158, 11, 0.15)',
+          backgroundColor: isTeeActive ? 'rgba(16, 185, 129, 0.08)' : 'rgba(245, 158, 11, 0.08)',
+          border: isTeeActive ? '1px solid rgba(16, 185, 129, 0.2)' : '1px solid rgba(245, 158, 11, 0.2)',
           display: 'flex',
           alignItems: 'center',
           gap: '10px'
         }}>
           {isTeeActive ? (
-            <ShieldCheck size={16} color="#10b981" style={{ flexShrink: 0 }} />
+            <ShieldCheck size={18} color="#10b981" style={{ flexShrink: 0 }} />
           ) : (
-            <Cpu size={16} color="#f59e0b" style={{ flexShrink: 0 }} />
+            <Cpu size={18} color="#f59e0b" style={{ flexShrink: 0 }} />
           )}
           <div>
             <div style={{ 
               fontSize: '11px', 
-              fontWeight: '700', 
+              fontWeight: '800', 
               color: isTeeActive ? '#10b981' : '#f59e0b',
               textTransform: 'uppercase',
               letterSpacing: '0.5px'
             }}>
               {isTeeActive ? 'Secure TEE Active' : 'TCP Simulator'}
             </div>
-            <div style={{ fontSize: '9px', color: '#64748b', marginTop: '2px' }}>
+            <div style={{ fontSize: '9px', color: '#64748b', marginTop: '2px', fontWeight: '600' }}>
               {isTeeActive ? 'AWS Nitro Enclave Enforced' : 'Local Fallback Mode'}
             </div>
           </div>
@@ -119,7 +129,18 @@ const Sidebar = () => {
       </div>
 
       {/* Navigation Links */}
-      <div style={{ flex: 1, padding: '16px 16px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+      <div style={{ flex: 1, padding: '16px 8px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+        <div style={{ 
+          fontSize: '10px', 
+          fontWeight: '800', 
+          color: '#475569', 
+          textTransform: 'uppercase', 
+          padding: '0 12px 8px 12px',
+          letterSpacing: '1px'
+        }}>
+          Surveillance Suite
+        </div>
+        
         {navItems.map((item) => {
           const isActive = location.pathname === item.path;
           return (
@@ -129,71 +150,68 @@ const Sidebar = () => {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '12px',
-                padding: '12px 16px',
-                borderRadius: '8px',
+                justifyContent: 'space-between',
+                padding: '10px 12px',
+                borderRadius: '6px',
                 border: 'none',
-                backgroundColor: isActive ? '#eff6ff' : 'transparent',
-                color: isActive ? '#1d4ed8' : '#475569',
-                fontWeight: isActive ? '600' : '500',
-                fontSize: '14px',
+                backgroundColor: isActive ? 'rgba(41, 182, 246, 0.15)' : 'transparent',
+                color: isActive ? '#ffffff' : '#94a3b8',
+                fontWeight: '600',
+                fontSize: '13.5px',
                 cursor: 'pointer',
                 textAlign: 'left',
                 width: '100%',
                 transition: 'all 0.2s',
-                outline: 'none'
+                outline: 'none',
+                fontFamily: '"Inter", sans-serif'
               }}
               onMouseEnter={(e) => {
                 if (!isActive) {
-                  e.currentTarget.style.backgroundColor = '#f1f5f9';
-                  e.currentTarget.style.color = '#0f172a';
+                  e.currentTarget.style.backgroundColor = '#1e293b';
+                  e.currentTarget.style.color = '#ffffff';
                 }
               }}
               onMouseLeave={(e) => {
                 if (!isActive) {
                   e.currentTarget.style.backgroundColor = 'transparent';
-                  e.currentTarget.style.color = '#475569';
+                  e.currentTarget.style.color = '#94a3b8';
                 }
               }}
             >
-              {item.icon}
-              {item.name}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                {item.icon}
+                <span>{item.name}</span>
+              </div>
+              {isActive && <div style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: '#29B6F6' }} />}
             </button>
           );
         })}
       </div>
 
-      {/* User Session Profile & Logout */}
-      <div style={{ 
-        padding: '16px 20px', 
-        borderTop: '1px solid #e2e8f0',
+      {/* User Session Profile & Sign Out */}
+      <div style={{
+        padding: '16px',
+        borderTop: '1px solid #1e293b',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        gap: '12px'
+        backgroundColor: '#0a1526'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1, overflow: 'hidden' }}>
-          <div style={{ 
-            width: '32px', 
-            height: '32px', 
-            borderRadius: '50%', 
-            backgroundColor: '#e2e8f0',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: '700',
-            fontSize: '13px',
-            color: '#0f172a',
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', overflow: 'hidden' }}>
+          <div style={{
+            width: '32px', height: '32px', borderRadius: '50%',
+            backgroundColor: '#1e293b', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: '12px', fontWeight: '800', color: '#29B6F6', border: '1px solid rgba(41,182,246,0.3)',
             flexShrink: 0
           }}>
-            CO
+            AK
           </div>
           <div style={{ minWidth: 0 }}>
-            <div style={{ fontSize: '13px', fontWeight: '600', color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.name}</div>
-            <div style={{ fontSize: '10px', color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Officer: {user.id}</div>
+            <div style={{ fontSize: '12px', fontWeight: '700', color: '#ffffff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.name}</div>
+            <div style={{ fontSize: '9px', color: '#64748b', fontWeight: '600', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.role}</div>
           </div>
         </div>
-
+        
         <button 
           onClick={handleLogout}
           style={{
@@ -201,7 +219,7 @@ const Sidebar = () => {
             border: 'none',
             color: '#64748b',
             cursor: 'pointer',
-            padding: '4px',
+            padding: '6px',
             borderRadius: '4px',
             display: 'flex',
             alignItems: 'center',
@@ -212,7 +230,7 @@ const Sidebar = () => {
           onMouseLeave={(e) => e.currentTarget.style.color = '#64748b'}
           title="Sign Out"
         >
-          <LogOut size={18} />
+          <LogOut size={16} />
         </button>
       </div>
     </div>

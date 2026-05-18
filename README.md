@@ -1,17 +1,18 @@
-# CipherPulse — Confidential Compliance AI (RegTech)
+# CipherPulse — Confidential Compliance SaaS (RegTech)
 
-**One-line pitch:** A privacy-preserving, AI-powered communications surveillance platform for financial institutions that detects compliance risks (MNPI, guaranteed returns, collusion, PII leakage) with an end-to-end **ETL + ML + Analytics + UI** stack.
+**One-line pitch:** A privacy-preserving, enterprise-grade SaaS communications surveillance platform for financial institutions that detects compliance risks (MNPI, guaranteed returns, collusion, PII leakage) with an end-to-end cloud-native **ETL + ML + Analytics + UI** stack.
 
 ---
 
 ## 🌟 Overview
 
-CipherPulse is a comprehensive RegTech solution designed to help financial institutions monitor internal communications (email, Slack, Teams) for regulatory and compliance risks. It leverages Machine Learning to flag suspicious activity while providing a robust human-in-the-loop review workflow and leadership-level analytics.
+CipherPulse is a comprehensive, multi-tenant RegTech SaaS solution designed to help financial institutions monitor internal communications (email, Slack, Teams) for regulatory and compliance risks in real-time. Delivered as a highly secure cloud service, it leverages Machine Learning to flag suspicious activity while providing a robust human-in-the-loop review workflow and leadership-level analytics.
 
-### Key Features
-- **Real-time Risk Scoring**: Instant analysis of messages with scores from 0-100.
-- **Explainable AI**: Highlights specific tokens and phrases that triggered the flag, providing context for compliance officers.
-- **Human-in-the-Loop**: A dedicated "Inbox" for reviewing, dismissing, or escalating flagged messages.
+### Key SaaS Features
+- **Multi-Tenant Enclave Isolation**: Absolute tenant-level isolation enforced by cryptographic secure hardware enclaves (AWS Nitro / Intel SGX).
+- **Real-time Risk Scoring**: Cloud-native pipeline offering instant analysis of messages with risk scores from 0-100.
+- **Explainable AI**: Highlights specific tokens and phrases that triggered the flag, providing clear context for compliance officers.
+- **Human-in-the-Loop**: A dedicated SaaS dashboard "Inbox" for reviewing, dismissing, or escalating flagged messages.
 - **Advanced Analytics**: Interactive dashboard showing risk trends, category distributions, and team-based risk profiles.
 - **Synthetic Data Pipeline**: Built-in generator for creating realistic financial communications with labeled violations.
 
