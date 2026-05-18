@@ -10,7 +10,8 @@ import {
   LogOut, 
   ShieldCheck, 
   Cpu,
-  Database
+  Database,
+  Network
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -41,6 +42,7 @@ const Sidebar = () => {
     { name: 'Review Inbox', path: '/inbox', icon: <Folder size={18} /> },
     { name: 'Scored Results', path: '/analysis', icon: <FileText size={18} /> },
     { name: 'Compliance Analytics', path: '/analytics', icon: <BarChart2 size={18} /> },
+    { name: 'Blueprint Explorer', path: '/blueprint', icon: <Network size={18} /> },
     { name: 'SQL Analyzer', path: '/sql-analyzer', icon: <Database size={18} /> },
     { name: 'System Metrics', path: '/metrics', icon: <Activity size={18} /> },
     { name: 'Model Settings', path: '/settings', icon: <Sliders size={18} /> },

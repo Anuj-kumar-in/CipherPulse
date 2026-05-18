@@ -8,6 +8,7 @@ import Analytics from './pages/Analytics'
 import SystemMetrics from './pages/SystemMetrics'
 import Settings from './pages/Settings'
 import SqlAnalyzer from './pages/SqlAnalyzer'
+import BlueprintExplorer from './pages/BlueprintExplorer'
 
 // Protected Route Component to restrict access to authenticated compliance officers
 const ProtectedRoute = ({ children }) => {
@@ -55,6 +56,11 @@ function App() {
           <Route path="/sql-analyzer" element={
             <ProtectedRoute>
               <SqlAnalyzer />
+            </ProtectedRoute>
+          } />
+          <Route path="/blueprint" element={
+            <ProtectedRoute>
+              <BlueprintExplorer />
             </ProtectedRoute>
           } />
           
