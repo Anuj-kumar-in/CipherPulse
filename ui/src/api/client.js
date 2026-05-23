@@ -16,6 +16,13 @@ export const api = {
   submitFeedback: (data) => client.post('/feedback', data),
   getStats: () => client.get('/stats'),
   executeSql: (query) => client.post('/sql/analyze', { query }),
+  // Billing
+  createCheckoutSession: (priceId) => 
+    client.post('/billing/create-checkout-session', { 
+      price_id: priceId,
+      success_url: `${window.location.origin}/settings?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${window.location.origin}/settings`
+    }),
 };
 
 export default client;

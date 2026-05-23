@@ -9,6 +9,7 @@ from backend.app.core.config import settings
 from backend.app.api.routes_analyze import router as analyze_router
 from backend.app.api.routes_messages import router as messages_router
 from backend.app.api.routes_feedback import router as feedback_router
+from backend.app.api.routes_billing import router as billing_router
 
 app = FastAPI(
     title="CipherPulse — Confidential Compliance AI",
@@ -31,6 +32,7 @@ app.add_middleware(
 app.include_router(analyze_router)
 app.include_router(messages_router)
 app.include_router(feedback_router)
+app.include_router(billing_router)
 
 
 @app.get("/")

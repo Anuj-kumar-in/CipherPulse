@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
+import { api } from '../api/client';
 import { 
   Sliders, 
   Shield, 
@@ -13,7 +14,9 @@ import {
   MessageSquare,
   Clock,
   Trash2,
-  Download
+  Download,
+  CreditCard,
+  Zap
 } from 'lucide-react';
 
 const Settings = () => {
@@ -67,6 +70,18 @@ const Settings = () => {
     setConnectSlack(false);
     setConnectTeams(true);
     setRetentionDays(30);
+  };
+
+  const handleUpgrade = async (priceId) => {
+    try {
+      const response = await api.createCheckoutSession(priceId);
+      if (response.data.url) {
+        window.location.href = response.data.url;
+      }
+    } catch (error) {
+      console.error('Stripe error:', error);
+      alert('Failed to initiate checkout. Please check the backend connection.');
+    }
   };
 
   const triggerDownloadBackup = () => {
@@ -129,14 +144,15 @@ Signature: SHA384-F194641-SEALED-NITRO-CIPHERPULSE
 
         <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '32px' }}>
           {/* Settings Form Card */}
-          <div style={{
-            backgroundColor: '#ffffff',
-            border: '1px solid #e2e8f0',
-            borderRadius: '12px',
-            padding: '32px',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
-          }}>
-            <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+            <div style={{
+              backgroundColor: '#ffffff',
+              border: '1px solid #e2e8f0',
+              borderRadius: '12px',
+              padding: '32px',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+            }}>
+              <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
               
               {/* SECTION 1: INGESTION PIPELINE CONNECTORS */}
               <div>
@@ -389,8 +405,96 @@ Signature: SHA384-F194641-SEALED-NITRO-CIPHERPULSE
             </form>
           </div>
 
+          {/* Billing Section (New) */}
+          <div style={{
+            backgroundColor: '#ffffff',
+            border: '1px solid #e2e8f0',
+            borderRadius: '12px',
+            padding: '32px',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+            background: 'linear-gradient(to bottom right, #ffffff, #f7f9fc)'
+          }}>
+            <h3 style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <CreditCard size={20} color="#8b5cf6" /> Subscription & Licensing
+            </h3>
+            <p style={{ fontSize: '13px', color: '#475569', margin: '0 0 24px 0' }}>Manage your CipherPulse enterprise license and scale your compliance throughput.</p>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+              {/* Pro Plan */}
+              <div style={{ 
+                border: '2px solid #e2e8f0', 
+                borderRadius: '12px', 
+                padding: '20px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px',
+                transition: 'all 0.2s',
+                ':hover': { borderColor: '#8b5cf6' }
+              }}>
+                <div>
+                  <div style={{ fontSize: '12px', fontWeight: '700', color: '#8b5cf6', textTransform: 'uppercase', marginBottom: '4px' }}>Standard</div>
+                  <div style={{ fontSize: '20px', fontWeight: '800', color: '#0f172a' }}>CipherPulse Pro</div>
+                </div>
+                <div style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a' }}>$499<span style={{ fontSize: '14px', color: '#64748b' }}>/mo</span></div>
+                <ul style={{ padding: 0, margin: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <li style={{ fontSize: '12.5px', color: '#475569', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <CheckCircle size={14} color="#10b981" /> 1M messages/mo
+                  </li>
+                  <li style={{ fontSize: '12.5px', color: '#475569', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <CheckCircle size={14} color="#10b981" /> TEE Support
+                  </li>
+                </ul>
+                <button 
+                  onClick={() => handleUpgrade('price_1Hh1Y22eZvKYlo2C0Z2Z2Z2Z')} // Example Test Price ID
+                  style={{
+                    backgroundColor: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '8px', padding: '10px',
+                    fontSize: '13px', fontWeight: '700', color: '#0f172a', cursor: 'pointer', marginTop: 'auto'
+                  }}
+                >
+                  Upgrade to Pro
+                </button>
+              </div>
+
+              {/* Enterprise Plan */}
+              <div style={{ 
+                background: 'linear-gradient(135deg, #0f172a, #1e293b)', 
+                borderRadius: '12px', 
+                padding: '20px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px',
+                color: '#ffffff',
+                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
+              }}>
+                <div>
+                  <div style={{ fontSize: '12px', fontWeight: '700', color: '#8b5cf6', textTransform: 'uppercase', marginBottom: '4px' }}>Enterprise</div>
+                  <div style={{ fontSize: '20px', fontWeight: '800', color: '#ffffff' }}>Global Scale</div>
+                </div>
+                <div style={{ fontSize: '24px', fontWeight: '800' }}>$2,499<span style={{ fontSize: '14px', color: '#94a3b8' }}>/mo</span></div>
+                <ul style={{ padding: 0, margin: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <li style={{ fontSize: '12.5px', color: '#e2e8f0', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <Zap size={14} color="#f59e0b" /> Unlimited throughput
+                  </li>
+                  <li style={{ fontSize: '12.5px', color: '#e2e8f0', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <Zap size={14} color="#f59e0b" /> Dedicated HW Enclave
+                  </li>
+                </ul>
+                <button 
+                   onClick={() => handleUpgrade('price_1Hh1Y22eZvKYlo2C1Z1Z1Z1Z')} // Example Test Price ID
+                   style={{
+                    background: 'linear-gradient(135deg, #8b5cf6, #0284c7)', border: 'none', borderRadius: '8px', padding: '10px',
+                    fontSize: '13px', fontWeight: '700', color: '#ffffff', cursor: 'pointer', marginTop: 'auto'
+                  }}
+                >
+                  Contact Sales
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '32px', marginTop: '32px' }}>
           {/* Quick Info & Warnings */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             {/* Warning Card */}
             <div style={{
               backgroundColor: '#fffbeb',

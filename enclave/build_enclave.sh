@@ -5,7 +5,7 @@ echo "🔨 Building Docker image for the enclave..."
 docker build -t cipherpulse-enclave -f enclave/Dockerfile.enclave .
 
 echo "🔐 Converting Docker image to EIF (Enclave Image File)..."
-nitro-cli build-enclave \
+sudo nitro-cli build-enclave \
     --docker-uri cipherpulse-enclave:latest \
     --output-file cipherpulse.eif
 

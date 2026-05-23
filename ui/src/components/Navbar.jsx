@@ -194,7 +194,7 @@ const Navbar = () => {
             </Link>
             
             <Link 
-              to="/inbox" 
+              to="/signup" 
               style={{ 
                 color: '#ffffff', 
                 textDecoration: 'none', 

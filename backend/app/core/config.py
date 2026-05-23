@@ -15,6 +15,12 @@ class Settings(BaseSettings):
     RISK_THRESHOLD: int = 60
     USE_TEE: bool = False  # Enable to route inference through AWS Nitro Enclave
     CORS_ORIGINS: list[str] = ["http://localhost:5173", "http://localhost:3000", "http://localhost:8050"]
+    
+    # Stripe Integrations
+    STRIPE_PUBLISHABLE_KEY: str = ""
+    STRIPE_SECRET_KEY: str = ""
+    STRIPE_WEBHOOK_SECRET_SNAPSHOT: str = ""
+    STRIPE_WEBHOOK_SECRET_THIN: str = ""
 
     model_config = {
         "extra": "ignore",
@@ -23,3 +29,4 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
